@@ -82,8 +82,7 @@ class LoanRequest < ActiveRecord::Base
 
   def related_projects
     Rails.cache.fetch("related_loans_#{self.id}") do
-      # categories.first.loan_requests.where("loan_request_id != #{self.id}").limit(4)
-      (categories.flat_map(&:loan_requests) - [self]).shuffle.take(4)
+      categories.first.loan_requests.where("loan_request_id != #{self.id}").limit(4).order("RANDOM()")
     end
   end
 end
